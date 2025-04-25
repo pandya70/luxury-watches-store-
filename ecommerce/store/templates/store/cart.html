@@ -1,0 +1,122 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="box-element shadow-sm p-4 mb-4">
+                <a class="btn btn-outline-dark" href="{% url 'store' %}">
+                    <i class="fas fa-arrow-left mr-2"></i> Continue Shopping
+                </a>
+
+                <div class="cart-summary mt-4">
+                    <table class="table">
+                        <tr>
+                            <th><h5>Items: <strong>{{order.get_cart_items}}</strong></h5></th>
+                            <th><h5>Total: <strong>${{order.get_cart_total|floatformat:2}}</strong></h5></th>
+                            <th>
+                                <a style="float:right; margin:5px;" class="btn btn-success" href="{% url 'checkout' %}">
+                                    Proceed to Checkout <i class="fas fa-lock ml-2"></i>
+                                </a>
+                            </th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="box-element shadow-sm p-4">
+                <div class="cart-row header-row">
+                    <div style="flex:2"></div>
+                    <div style="flex:2"><strong>Item</strong></div>
+                    <div style="flex:1"><strong>Price</strong></div>
+                    <div style="flex:1"><strong>Quantity</strong></div>
+                    <div style="flex:1"><strong>Total</strong></div>
+                    <div style="flex:1"><strong>Action</strong></div>
+                </div>
+                
+                {% for item in items %}
+                <div class="cart-row">
+                    <div style="flex:2">
+                        <img class="row-image" src="{{item.product.imageURL}}">
+                    </div>
+                    <div style="flex:2">
+                        <p class="mb-1"><strong>{{item.product.name}}</strong></p>
+                        <small class="text-muted">SKU: {{item.product.id}}</small>
+                    </div>
+                    <div style="flex:1">
+                        <p>${{item.product.price|floatformat:2}}</p>
+                    </div>
+                    <div style="flex:1">
+                        <div class="quantity-selector d-flex align-items-center">
+                            <img data-product="{{item.product.id}}" data-action="remove" 
+                                 class="chg-quantity update-cart" src="{% static 'images/arrow-down.png' %}">
+                            <p class="quantity mx-2 mb-0">{{item.quantity}}</p>
+                            <img data-product="{{item.product.id}}" data-action="add" 
+                                 class="chg-quantity update-cart" src="{% static 'images/arrow-up.png' %}">
+                        </div>
+                    </div>
+                    <div style="flex:1">
+                        <p>${{item.get_total|floatformat:2}}</p>
+                    </div>
+                    <div style="flex:1">
+                        <button data-product="{{item.product.id}}" data-action="delete" 
+                                class="btn btn-outline-danger btn-sm update-cart">
+                            <i class="fas fa-trash-alt"></i> Remove
+                        </button>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-5">
+                    <i class="fas fa-shopping-cart fa-4x text-muted mb-4"></i>
+                    <h4>Your cart is empty</h4>
+                    <p class="text-muted">You haven't added any items to your cart yet.</p>
+                    <a href="{% url 'store' %}" class="btn btn-dark mt-3">
+                        <i class="fas fa-store mr-2"></i> Start Shopping
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            
+            {% if items %}
+            <div class="box-element shadow-sm p-4 mt-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="promo-code">
+                            <h5 class="mb-3">Promo Code</h5>
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Enter promo code">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button">Apply</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="order-summary">
+                            <h5 class="mb-3">Order Summary</h5>
+                            <table class="table">
+                                <tr>
+                                    <td>Subtotal</td>
+                                    <td>${{order.get_cart_total|floatformat:2}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Estimated Shipping</td>
+                                    <td>$0.00</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Total</strong></td>
+                                    <td><strong>${{order.get_cart_total|floatformat:2}}</strong></td>
+                                </tr>
+                            </table>
+                            <a href="{% url 'checkout' %}" class="btn btn-success btn-block">
+                                Proceed to Checkout <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

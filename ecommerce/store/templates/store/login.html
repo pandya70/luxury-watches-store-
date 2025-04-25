@@ -1,0 +1,40 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4">Login</h2>
+                    
+                    {% if messages %}
+                    <div class="alert alert-danger">
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <form method="POST" action="{% url 'login' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-dark btn-block mt-4">Login</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
